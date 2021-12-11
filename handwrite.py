@@ -5,8 +5,9 @@ from predictNumber import predictNumber
 window = None
 canvas = None
 x1, y1 = None, None # 마우스 좌표
-wp = 8 # 선 굵기
+wp = 10 # 선 굵기
 p, n = None, "답" # 결과
+resultLabel, probLabel = None, None
 
 
 def mouseMove(event):
@@ -18,6 +19,9 @@ def mouseMove(event):
 
 def clearCanvas(): # 지우기
     canvas.delete("all")
+    global resultLabel, probLabel
+    resultLabel.place_forget()
+    probLabel.place_forget()
 
 
 def run(): # 실행
@@ -31,11 +35,14 @@ def run(): # 실행
     # 신경망에 보내 결과 추출
     global p, n
     p, n = predictNumber(img) # p는 각 숫자일 확률이 담긴 배열, n은 확률 최댓값의 index
-    print(p)
 
     # 결과
+    global resultLabel, probLabel
     resultLabel = Label(window, text=n[0], font=("궁서", 40))
     resultLabel.place(x=140, y=350)
+    probOfMax = round(p[0][n[0]]*100,1)
+    probLabel = Label(window, text=str(probOfMax)+"%", font=("궁서", 20))
+    probLabel.place(x=120, y=420)
 
 
 window = Tk()
